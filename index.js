@@ -1,10 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import Student from "./models/student.js";
-import studentRouter from "./routers/studentRouter.js";
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
+import productRouter from "./routers/productRouter.js";
 let app=express()
 let connectionString="mongodb+srv://diproductionyt_db_user:diproduction123@cluster0.rh3urw2.mongodb.net/?appName=Cluster0"
 
@@ -37,51 +36,10 @@ app.use(
     }
 )
 
-app.use("/Students",studentRouter)
 app.use("/users",userRouter)
-app.post("/",
-    (req,res)=>{
-        console.log(req.body)
-        const student=new Student(
-            {
-                name:req.body.name,
-                age:req.body.age,
-                email:req.body.email
-            }
-        )
-        student.save().then(
-            ()=>{
-                res.json(
-                    {
-                        message:"student saved successfully"
-                    }
-                )
-            }
-        ).catch(
-            ()=>{
-                console.log("Faild to save student")
-            }
-        )
-    }
-)
+app.use("/products",productRouter)
 app.listen(5000,()=>{console.log("Server started")})
 
-
-app.get("/",
-    (req,res)=>{
-        Student.find().then(
-            (students)=>{
-                res.json(students)
-            }
-        ).catch(
-            ()=>{
-                res.json({
-                    message:"Faild to fetch students"
-                })
-            }
-        )
-    }
-)
 
 app.delete("/",()=>{console.log("this is a delete request")})
 
